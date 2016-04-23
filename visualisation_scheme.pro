@@ -13,6 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        window.cpp
+        window.cpp \
+    translation_funcs.cpp
 
 HEADERS  += window.h
+QT += opengl
+

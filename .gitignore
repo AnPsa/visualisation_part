@@ -1,0 +1,4 @@
+*.o
+Makefile
+*.pro*
+visualisation_scheme
