@@ -17,6 +17,8 @@ public:
 
   data_holder();
 
+  //in file for H firs to numbers is dim H and stages count
+  //in file for V firs numbe is dim
   bool read_data(std::string H_filemane, std::string V_filename);
   bool read_data_for_H(std::string H_filemane);
   bool read_data_for_v(std::string V_filename);
