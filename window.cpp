@@ -9,7 +9,7 @@ Scene3D::Scene3D (QWidget* parent, data_holder *idata) : QGLWidget(parent)
 {
 
   data = idata;
-  xRot = -90; yRot = 0; zRot = 0; zTra = 0; nSca = 1;
+  xRot = -90; yRot = 0; zRot = 0; zTra = 0; nSca = 0.1;
 }
 
 Scene3D::~Scene3D ()
