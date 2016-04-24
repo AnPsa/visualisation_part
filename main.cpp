@@ -12,8 +12,10 @@ int main (int argc, char *argv[])
     QMainWindow *window = new QMainWindow;
     window->setWindowTitle ("Graph");
 
+    data_holder data;
+    data.read_data ("H_for_draw.txt", "");
 
-    Scene3D draw_area;
+    Scene3D draw_area(0, &data);
 
     draw_area.resize (500, 500);
     draw_area.show ();

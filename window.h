@@ -3,7 +3,7 @@
 
 #include <QGLWidget>
 #include <QPoint>
-
+#include "data_holder.h"
 
 class Scene3D : public QGLWidget
 {
@@ -16,6 +16,8 @@ class Scene3D : public QGLWidget
 
   QPoint ptrMousePosition;
 
+  data_holder *data;
+
   void scale_plus ();
   void scale_minus ();
   void rotate_up  ();
@@ -27,7 +29,8 @@ class Scene3D : public QGLWidget
   void defaultScene ();
   void drawAxis ();
 
-  void draw_H();
+  void H_color(double value);
+  void draw_H(int time_step_number);
 
   protected:
     void initializeGL ();
@@ -40,7 +43,7 @@ class Scene3D : public QGLWidget
     void keyPressEvent (QKeyEvent* pe);
 
   public:
-    Scene3D (QWidget* parent = 0);
+    Scene3D (QWidget* parent, data_holder *idata);
     ~Scene3D ();
 };
 

@@ -14,6 +14,9 @@ public:
   std::vector <double> m_y_v;
   std::vector <double> m_x_h;
   std::vector <double> m_y_h;
+  std::vector <int> m_h_M0R;
+
+  double max_H, min_H, middle_H;
 
 
   int m_dim;

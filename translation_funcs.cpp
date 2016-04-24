@@ -165,18 +165,4 @@ void Scene3D::drawAxis ()
   glEnd ();
 }
 
-void Scene3D::draw_H ()
-{
-  glBegin (GL_POLYGON);
-  glColor3d (1,1,0);
-  glVertex3f ( 0.0f,  0.0f,  0.0f);
-  glColor3d (1,0,0);
-  glVertex3f ( 1.0f,  0.0f,  0.0f);
-  glColor3d (0,1,0);
-  glVertex3f ( 1.0f,  1.0f,  0.0f);
-  glColor3d (0,0,1);
-  glVertex3f ( 0.0f,  1.0f,  0.0f);
-  glEnd ();
-
-}
 
