@@ -8,16 +8,20 @@ data_holder::data_holder()
   min_H = max_H = 0;
 }
 
-bool data_holder::read_data_for_H(std::string H_filemane)
+bool data_holder::read_data_for_H(std::string H_filename)
 {
-  FILE *h_file = fopen (H_filemane.c_str (), "r");
+  FILE *h_file;
+  if (!(h_file = fopen (H_filename.c_str (), "r")))
+    {
+      printf ("Cannot open file %s\n", H_filename.c_str ());
+      return false;
+    }
 
   if (fscanf (h_file, "%d%d", &m_dim_h, &m_steps_count) != 2)
     return false;
 
   if (m_dim_h < 1 || m_steps_count < 1)
     return false;
-
 
   m_H_layer.resize (m_steps_count);
   m_h_M0R.resize (m_dim_h);
@@ -56,7 +60,12 @@ bool data_holder::read_data_for_H(std::string H_filemane)
 
 bool data_holder::read_data_for_v (std::string V_filename)
 {
-  FILE *v_file = fopen (V_filename.c_str (), "r");
+  FILE *v_file;
+  if (!(v_file = fopen (V_filename.c_str (), "r")))
+    {
+      printf ("Cannot read file %s\n", V_filename.c_str ());
+      return false;
+    }
 
   if (fscanf (v_file, "%d", &m_dim) != 1)
     return false;

@@ -3,7 +3,8 @@
 
 #include <QGLWidget>
 #include <QPoint>
-#include "data_holder.h"
+
+class data_holder;
 
 class Scene3D : public QGLWidget
 {
@@ -32,19 +33,19 @@ class Scene3D : public QGLWidget
   void H_color(double value);
   void draw_H(int time_step_number);
 
-  protected:
-    void initializeGL ();
-    void resizeGL (int nWidth, int nHeight);
-    void paintGL ();
-    void mousePressEvent (QMouseEvent* pe);
-    void mouseMoveEvent (QMouseEvent* pe);
-    void mouseReleaseEvent (QMouseEvent*);
-    void wheelEvent (QWheelEvent* pe);
-    void keyPressEvent (QKeyEvent* pe);
+protected:
+  void initializeGL ();
+  void resizeGL (int nWidth, int nHeight);
+  void paintGL ();
+  void mousePressEvent (QMouseEvent* pe);
+  void mouseMoveEvent (QMouseEvent* pe);
+  void mouseReleaseEvent (QMouseEvent*);
+  void wheelEvent (QWheelEvent* pe);
+  void keyPressEvent (QKeyEvent* pe);
 
-  public:
-    Scene3D (QWidget* parent, data_holder *idata);
-    ~Scene3D ();
+public:
+  Scene3D (QWidget* parent, data_holder *idata);
+  ~Scene3D ();
 };
 
 #endif // WINDOW_H

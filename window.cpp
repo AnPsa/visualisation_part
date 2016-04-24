@@ -1,4 +1,5 @@
 #include "window.h"
+#include "data_holder.h"
 
 #include <QtGui>
 #include <math.h>

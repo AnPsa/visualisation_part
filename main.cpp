@@ -1,4 +1,5 @@
 #include "window.h"
+#include "data_holder.h"
 #include <fenv.h>
 #include <QMainWindow>
 #include <QApplication>
