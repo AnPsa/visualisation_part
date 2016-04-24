@@ -3,11 +3,12 @@
 
 void Scene3D::initializeGL()
 {
+  glEnable(GL_COLOR_MATERIAL);
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   qglClearColor (Qt::white);
   glEnable (GL_DEPTH_TEST);
-  glShadeModel (GL_FLAT);
+  glShadeModel (GL_SMOOTH);
 }
 
 void Scene3D::resizeGL (int nWidth, int nHeight)
@@ -150,8 +151,8 @@ void Scene3D::drawAxis ()
 {
   glLineWidth (3.0f);
 
-  glColor4f (1.00f, 0.00f, 0.00f, 1.0f);
   glBegin (GL_LINES);
+  glColor3d (1, 0, 0);
   glVertex3f ( 3.0f,  0.0f,  0.0f);
   glVertex3f (-3.0f,  0.0f,  0.0f);
   glEnd ();
@@ -161,10 +162,21 @@ void Scene3D::drawAxis ()
   glBegin (GL_LINES);
   glVertex3f (0.0f,   3.0f,  0.0f);
   glVertex3f (0.0f, -10.0f,  0.0f);
-
-  glColor4f (0.00f, 0.00f, 1.00f, 1.0f);
-  glVertex3f ( 0.0f,  0.0f,  3.0f);
-  glVertex3f ( 0.0f,  0.0f, -3.0f);
   glEnd ();
+}
+
+void Scene3D::draw_H ()
+{
+  glBegin (GL_POLYGON);
+  glColor3d (1,1,0);
+  glVertex3f ( 0.0f,  0.0f,  0.0f);
+  glColor3d (1,0,0);
+  glVertex3f ( 1.0f,  0.0f,  0.0f);
+  glColor3d (0,1,0);
+  glVertex3f ( 1.0f,  1.0f,  0.0f);
+  glColor3d (0,0,1);
+  glVertex3f ( 0.0f,  1.0f,  0.0f);
+  glEnd ();
+
 }
 

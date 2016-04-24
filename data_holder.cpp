@@ -24,11 +24,13 @@ bool data_holder::read_data_for_H(std::string H_filemane)
       m_H_layer.resize (m_dim_h);
       for (int i = 0; i < m_dim_h; i++)
         {
-          double temp;
-          if (fscanf (h_file, "%lf", &temp) != 1)
+          double temp, tempx, tempy;
+          if (fscanf (h_file, "%lf%lf%lf", &temp, &tempx, &tempy) != 3)
             return false;
 
           m_H_layer[t][i] = temp;
+          m_x_h[i] = tempx;
+          m_y_h[i] = tempy;
         }
     }
   fclose (h_file);
@@ -50,6 +52,9 @@ bool data_holder::read_data_for_v (std::string V_filename)
   m_V1_layer.resize (m_steps_count);
   m_V2_layer.resize (m_steps_count);
 
+  m_x.resize (m_dim);
+  m_y.resize (m_dim);
+
   for (int t = 0; t < m_steps_count; t++)
     {
       m_V1_layer[t].resize (m_dim);
@@ -57,12 +62,14 @@ bool data_holder::read_data_for_v (std::string V_filename)
 
       for (int i = 0; i < m_dim; i++)
         {
-          double temp1, temp2;
-          if (fscanf (v_file, "%lf%lf", &temp1, &temp2) != 2)
+          double temp1, temp2, temx, tempy;
+          if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 4)
             return false;
 
           m_V1_layer[t][i] = temp1;
           m_V2_layer[t][i] = temp2;
+          m_x_v[i] = tempx;
+          m_y_v[i] = tempy;
         }
     }
   fclose (v_file);

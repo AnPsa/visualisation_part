@@ -27,6 +27,8 @@ class Scene3D : public QGLWidget
   void defaultScene ();
   void drawAxis ();
 
+  void draw_H();
+
   protected:
     void initializeGL ();
     void resizeGL (int nWidth, int nHeight);

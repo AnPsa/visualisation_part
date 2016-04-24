@@ -10,6 +10,11 @@ public:
   std::vector <std::vector <double> > m_H_layer;
   std::vector <std::vector <double> > m_V1_layer;
   std::vector <std::vector <double> > m_V2_layer;
+  std::vector <double> m_x_v;
+  std::vector <double> m_y_V;
+  std::vector <double> m_x_h;
+  std::vector <double> m_y_h;
+
 
   int m_dim;
   int m_dim_h;

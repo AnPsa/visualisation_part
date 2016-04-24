@@ -21,6 +21,7 @@ void Scene3D::paintGL ()
   glMatrixMode (GL_MODELVIEW);
   glLoadIdentity ();
   drawAxis ();
+  draw_H ();
 
   glScalef (nSca, nSca, nSca);
   glTranslatef (0.0f, zTra, 0.0f);
