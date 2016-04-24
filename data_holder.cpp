@@ -52,8 +52,8 @@ bool data_holder::read_data_for_v (std::string V_filename)
   m_V1_layer.resize (m_steps_count);
   m_V2_layer.resize (m_steps_count);
 
-  m_x.resize (m_dim);
-  m_y.resize (m_dim);
+  m_x_v.resize (m_dim);
+  m_y_v.resize (m_dim);
 
   for (int t = 0; t < m_steps_count; t++)
     {
@@ -62,7 +62,7 @@ bool data_holder::read_data_for_v (std::string V_filename)
 
       for (int i = 0; i < m_dim; i++)
         {
-          double temp1, temp2, temx, tempy;
+          double temp1, temp2, tempx, tempy;
           if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 4)
             return false;
 
