@@ -21,6 +21,8 @@ bool data_holder::read_data_for_H(std::string H_filemane)
 
   m_H_layer.resize (m_steps_count);
   m_h_M0R.resize (m_dim_h);
+  m_x_h.resize (m_dim_h);
+  m_y_h.resize (m_dim_h);
 
   for (int t = 0; t < m_steps_count; t++)
     {

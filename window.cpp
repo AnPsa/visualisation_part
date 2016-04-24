@@ -93,6 +93,7 @@ void Scene3D::draw_H (int time_step_number)
       H_color (H[M0R[i]]);
       glVertex3f (X[i], Y[M0R[i] + 1], 0);
       glEnd ();
+      i++;
 
     }
   glEnd ();
