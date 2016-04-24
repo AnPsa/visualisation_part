@@ -1,0 +1,25 @@
+#ifndef DATA_HOLDER_H
+#define DATA_HOLDER_H
+
+#include <vector>
+#include <string>
+
+class data_holder
+{
+public:
+  std::vector <std::vector <double> > m_H_layer;
+  std::vector <std::vector <double> > m_V1_layer;
+  std::vector <std::vector <double> > m_V2_layer;
+
+  int m_dim;
+  int m_dim_h;
+  int m_steps_count;
+
+  data_holder();
+
+  bool read_data(std::string H_filemane, std::string V_filename);
+  bool read_data_for_H(std::string H_filemane);
+  bool read_data_for_v(std::string V_filename);
+};
+
+#endif // DATA_HOLDER_H
