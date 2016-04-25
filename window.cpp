@@ -21,10 +21,11 @@ void Scene3D::paintGL ()
 {
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  drawAxis();
+  draw_H (0);
+
   glMatrixMode (GL_MODELVIEW);
   glLoadIdentity ();
-  drawAxis ();
-  draw_H (0);
 
   glScalef (nSca, nSca, nSca);
   glTranslatef (0.0f, zTra, 0.0f);
@@ -33,22 +34,21 @@ void Scene3D::paintGL ()
   glRotatef (zRot, 0.0f, 0.0f, 1.0f);
 }
 
-
 void Scene3D::H_color (double value)
 {
   double max = data->max_H;
   double min = data->min_H;
   double middle = data->middle_H;
 
-  float red = 0, green = 0, blue = 0;
+  float red = 0, green = 0;
   if (value > data->middle_H)
     {
       if (value - middle < 1e-15)
         green = 1;
       else
         {
-          green = (max - middle) / (value - middle);
-          red = 1 - green;
+          red = (value - middle) / (max - middle);
+          green = 1 - red;
         }
     }
   else
@@ -57,16 +57,15 @@ void Scene3D::H_color (double value)
         green = 1;
       else
         {
-          green = (middle - min) / (middle - value);
-          blue = 1 - green;
+          green = (middle - value) / (middle - min);
+          red = 1 - green;
         }
     }
-  glColor3d (red, green, blue);
+  glColor3d (red, green, 0/*blue*/);
 }
 
 void Scene3D::draw_H (int time_step_number)
 {
-
   int dim_h = data->m_dim_h;
   std::vector <double> X = data->m_x_h;
   std::vector <double> Y = data->m_y_h;
@@ -78,24 +77,33 @@ void Scene3D::draw_H (int time_step_number)
     {
       if (Y[i] > Y[i + 1])
         {
-          return;
+          break;
         }
       if (X[i] > X[i + 1])
-      {
+        {
           i++;
+          continue;
+        }
+      if (M0R[i] == -1)
+        {
+          i++;
+          continue;
         }
       glBegin (GL_POLYGON);
       H_color (H[i]);
       glVertex3f (X[i], Y[i], 0);
+      //glVertex3f (X[i], Y[i], H[i]);
       H_color (H[i+1]);
       glVertex3f (X[i + 1], Y[i], 0);
+      //glVertex3f (X[i + 1], Y[i], H[i + 1]);
       H_color (H[M0R[i] + 1]);
       glVertex3f (X[i + 1], Y[M0R[i] + 1], 0);
+      //glVertex3f (X[i + 1], Y[M0R[i] + 1], H[M0R[i] + 1]);
       H_color (H[M0R[i]]);
       glVertex3f (X[i], Y[M0R[i] + 1], 0);
+      //glVertex3f (X[i], Y[M0R[i] + 1], H[M0R[i]]);
       glEnd ();
       i++;
-
     }
   glEnd ();
 }

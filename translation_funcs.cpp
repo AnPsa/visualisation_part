@@ -16,7 +16,7 @@ void Scene3D::resizeGL (int nWidth, int nHeight)
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
   GLfloat ratio = (GLfloat)nHeight / (GLfloat)nWidth;
-  glOrtho (-10.0, 10.0, -10.0 * ratio, 10.0 * ratio, -10.0, 10.0);
+  glOrtho (-5.0, 5.0, -5.0 * ratio, 5.0 * ratio, -5.0, 5.0);
   glViewport (0, 0, (GLint)nWidth, (GLint)nHeight);
 }
 

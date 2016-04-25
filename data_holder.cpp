@@ -11,6 +11,8 @@ data_holder::data_holder()
 bool data_holder::read_data_for_H(std::string H_filename)
 {
   FILE *h_file;
+  double temp, tempx, tempy;
+
   if (!(h_file = fopen (H_filename.c_str (), "r")))
     {
       printf ("Cannot open file %s\n", H_filename.c_str ());
@@ -18,10 +20,16 @@ bool data_holder::read_data_for_H(std::string H_filename)
     }
 
   if (fscanf (h_file, "%d%d", &m_dim_h, &m_steps_count) != 2)
-    return false;
+    {
+      fclose (h_file);
+      return false;
+    }
 
   if (m_dim_h < 1 || m_steps_count < 1)
-    return false;
+    {
+      fclose (h_file);
+      return false;
+    }
 
   m_H_layer.resize (m_steps_count);
   m_h_M0R.resize (m_dim_h);
@@ -33,10 +41,12 @@ bool data_holder::read_data_for_H(std::string H_filename)
       m_H_layer[t].resize (m_dim_h);
       for (int i = 0; i < m_dim_h; i++)
         {
-          double temp, tempx, tempy;
           int tempi;
           if (fscanf (h_file, "%lf%lf%lf%d", &temp, &tempx, &tempy, &tempi) != 4)
-            return false;
+            {
+              fclose (h_file);
+              return false;
+            }
 
           m_H_layer[t][i] = temp;
           if (min_H > temp)
@@ -68,11 +78,16 @@ bool data_holder::read_data_for_v (std::string V_filename)
     }
 
   if (fscanf (v_file, "%d", &m_dim) != 1)
-    return false;
+    {
+      fclose (v_file);
+      return false;
+    }
 
   if (m_dim < 1 || m_steps_count < 1)
-    return false;
-
+    {
+      fclose (v_file);
+      return false;
+    }
 
   m_V1_layer.resize (m_steps_count);
   m_V2_layer.resize (m_steps_count);
@@ -89,7 +104,10 @@ bool data_holder::read_data_for_v (std::string V_filename)
         {
           double temp1, temp2, tempx, tempy;
           if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 4)
-            return false;
+            {
+              fclose (v_file);
+              return false;
+            }
 
           m_V1_layer[t][i] = temp1;
           m_V2_layer[t][i] = temp2;
@@ -118,5 +136,3 @@ bool data_holder::read_data (std::string H_filemane, std::string V_filename)
    }
  return true;
 }
-
-

@@ -14,7 +14,7 @@ int main (int argc, char *argv[])
     window->setWindowTitle ("Graph");
 
     data_holder data;
-    data.read_data ("H_for_draw.txt", "");
+    data.read_data ("density_36.log", "");
 
     Scene3D draw_area(0, &data);
 
