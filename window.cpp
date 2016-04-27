@@ -5,105 +5,96 @@
 #include <math.h>
 #include <string.h>
 #include <QDebug>
+#include <math.h>
 
-Scene3D::Scene3D (QWidget* parent, data_holder *idata) : QGLWidget(parent)
+
+
+graph_2d::graph_2d (QWidget *parent, data_holder *idata) : QWidget (parent)
 {
-
   data = idata;
-  xRot = -90; yRot = 0; zRot = 0; zTra = 0; nSca = 0.1;
+  left_border = -10.;
+  right_border = 10.;
+  scale_coeff = 1.;
 }
 
-Scene3D::~Scene3D ()
+graph_2d::~graph_2d ()
 {
 }
 
-void Scene3D::paintGL ()
+QSize graph_2d::minimumSizeHint () const
 {
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  drawAxis();
-  draw_H (0);
-
-  glMatrixMode (GL_MODELVIEW);
-  glLoadIdentity ();
-
-  glScalef (nSca, nSca, nSca);
-  glTranslatef (0.0f, zTra, 0.0f);
-  glRotatef (xRot, 1.0f, 0.0f, 0.0f);
-  glRotatef (yRot, 0.0f, 1.0f, 0.0f);
-  glRotatef (zRot, 0.0f, 0.0f, 1.0f);
+  return QSize (100, 100);
 }
 
-void Scene3D::H_color (double value)
+QSize graph_2d::sizeHint () const
+{
+  return QSize (500, 500);
+}
+
+void graph_2d::paintEvent (QPaintEvent * /* event */)
+{
+  QPainter painter (this);
+
+  painter.save ();
+
+  painter.translate (0.5 * width (), 0.5 * height ());
+  painter.scale (scale_coeff * width () / (right_border - left_border), -scale_coeff * height () / 20);// / (4.0 * (max_y - min_y)));
+
+  painter.setPen (QPen (Qt::red, 0.1));
+  painter.drawLine (left_border, 0, right_border, 0);
+  painter.setPen (QPen (Qt::green, 0.1));
+  painter.drawLine (0, -10, 0, 10);
+
+  draw_H (0, painter);
+  painter.restore ();
+}
+
+void graph_2d::H_color (double value, int &red, int &green)
 {
   double max = data->max_H;
   double min = data->min_H;
   double middle = data->middle_H;
 
-  float red = 0, green = 0;
   if (value > data->middle_H)
     {
       if (value - middle < 1e-15)
-        green = 1;
+        green = 255;
       else
         {
-          red = (value - middle) / (max - middle);
-          green = 1 - red;
+          red = 255 * (value - middle) / (max - middle);
+          green = 255 - red;
         }
     }
   else
     {
       if (middle - value < 1e-15)
-        green = 1;
+        green = 255;
       else
         {
-          green = (middle - value) / (middle - min);
-          red = 1 - green;
+          green = 255 * (middle - value) / (middle - min);
+          red = 255 - green;
         }
     }
-  glColor3d (red, green, 0/*blue*/);
 }
 
-void Scene3D::draw_H (int time_step_number)
+void graph_2d::draw_H (int time_step_number, QPainter &painter)
 {
   int dim_h = data->m_dim_h;
   std::vector <double> X = data->m_x_h;
   std::vector <double> Y = data->m_y_h;
-  std::vector <int> M0R = data->m_h_M0R;
   std::vector <double> H = data->m_H_layer[time_step_number];
+  int red = 0, green = 0;
   int i = 0;
+  double hx = X[1] - X[0], hy = hx;
 
-  while (i < dim_h + 1)
+  while (i < dim_h)
     {
-      if (Y[i] > Y[i + 1])
-        {
-          break;
-        }
-      if (X[i] > X[i + 1])
-        {
-          i++;
-          continue;
-        }
-      if (M0R[i] == -1)
-        {
-          i++;
-          continue;
-        }
-      glBegin (GL_POLYGON);
-      H_color (H[i]);
-      glVertex3f (X[i], Y[i], 0);
-      //glVertex3f (X[i], Y[i], H[i]);
-      H_color (H[i+1]);
-      glVertex3f (X[i + 1], Y[i], 0);
-      //glVertex3f (X[i + 1], Y[i], H[i + 1]);
-      H_color (H[M0R[i] + 1]);
-      glVertex3f (X[i + 1], Y[M0R[i] + 1], 0);
-      //glVertex3f (X[i + 1], Y[M0R[i] + 1], H[M0R[i] + 1]);
-      H_color (H[M0R[i]]);
-      glVertex3f (X[i], Y[M0R[i] + 1], 0);
-      //glVertex3f (X[i], Y[M0R[i] + 1], H[M0R[i]]);
-      glEnd ();
+      H_color (H[i], red, green);
+      QColor color (red, green, 0);
+      painter.setPen (QPen (color, 0.1));
+      QRect h_rect (X[i], Y[i], hx, hy);
+      painter.fillRect (h_rect, color);
+      painter.drawRect (h_rect);
       i++;
     }
-  glEnd ();
 }

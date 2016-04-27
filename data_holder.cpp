@@ -1,8 +1,6 @@
 #include "data_holder.h"
 #include <stdio.h>
 
-
-
 data_holder::data_holder()
 {
   min_H = max_H = 0;
@@ -77,13 +75,13 @@ bool data_holder::read_data_for_v (std::string V_filename)
       return false;
     }
 
-  if (fscanf (v_file, "%d", &m_dim) != 1)
+  if (fscanf (v_file, "%d", &m_dim_v) != 1)
     {
       fclose (v_file);
       return false;
     }
 
-  if (m_dim < 1 || m_steps_count < 1)
+  if (m_dim_v < 1 || m_steps_count < 1)
     {
       fclose (v_file);
       return false;
@@ -92,18 +90,18 @@ bool data_holder::read_data_for_v (std::string V_filename)
   m_V1_layer.resize (m_steps_count);
   m_V2_layer.resize (m_steps_count);
 
-  m_x_v.resize (m_dim);
-  m_y_v.resize (m_dim);
+  m_x_v.resize (m_dim_v);
+  m_y_v.resize (m_dim_v);
 
   for (int t = 0; t < m_steps_count; t++)
     {
-      m_V1_layer[t].resize (m_dim);
-      m_V2_layer[t].resize (m_dim);
+      m_V1_layer[t].resize (m_dim_v);
+      m_V2_layer[t].resize (m_dim_v);
 
-      for (int i = 0; i < m_dim; i++)
+      for (int i = 0; i < m_dim_v; i++)
         {
           double temp1, temp2, tempx, tempy;
-          if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 4)
+          if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 5)
             {
               fclose (v_file);
               return false;
@@ -126,8 +124,6 @@ bool data_holder::read_data (std::string H_filemane, std::string V_filename)
      printf ("can't read data for H\n");
      return false;
    }
-
- return true;
 
  if (!read_data_for_v (V_filename))
    {

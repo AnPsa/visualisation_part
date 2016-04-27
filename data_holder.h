@@ -19,11 +19,11 @@ public:
   double max_H, min_H, middle_H;
 
 
-  int m_dim;
+  int m_dim_v;
   int m_dim_h;
   int m_steps_count;
 
-  data_holder();
+  data_holder ();
 
   //in file for H firs to numbers is dim H and stages count
   //in file for V firs numbe is dim
