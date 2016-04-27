@@ -35,7 +35,7 @@ void graph_2d::paintEvent (QPaintEvent * /* event */)
 {
   QPainter painter (this);
 
-  painter.save ();
+  //painter.save ();
 
   painter.translate (0.5 * width (), 0.5 * height ());
   painter.scale (scale_coeff * width () / (right_border - left_border), -scale_coeff * height () / 20);// / (4.0 * (max_y - min_y)));
@@ -46,7 +46,11 @@ void graph_2d::paintEvent (QPaintEvent * /* event */)
   painter.drawLine (0, -10, 0, 10);
 
   draw_H (0, painter);
-  painter.restore ();
+
+  QColor color (0, 0, 255);
+  painter.setPen (QPen (color, 0.1));
+
+  //painter.restore ();
 }
 
 void graph_2d::H_color (double value, int &red, int &green)
@@ -83,7 +87,7 @@ void graph_2d::draw_H (int time_step_number, QPainter &painter)
   std::vector <double> X = data->m_x_h;
   std::vector <double> Y = data->m_y_h;
   std::vector <double> H = data->m_H_layer[time_step_number];
-  int red = 0, green = 0;
+  int red = 255, green = 0;
   int i = 0;
   double hx = X[1] - X[0], hy = hx;
 
@@ -92,7 +96,7 @@ void graph_2d::draw_H (int time_step_number, QPainter &painter)
       H_color (H[i], red, green);
       QColor color (red, green, 0);
       painter.setPen (QPen (color, 0.1));
-      QRect h_rect (X[i], Y[i], hx, hy);
+      QRectF h_rect (X[i], Y[i], hx, hy);
       painter.fillRect (h_rect, color);
       painter.drawRect (h_rect);
       i++;

@@ -1,5 +1,6 @@
 #include "data_holder.h"
 #include <stdio.h>
+#include <QDebug>
 
 data_holder::data_holder()
 {
@@ -30,7 +31,6 @@ bool data_holder::read_data_for_H(std::string H_filename)
     }
 
   m_H_layer.resize (m_steps_count);
-  m_h_M0R.resize (m_dim_h);
   m_x_h.resize (m_dim_h);
   m_y_h.resize (m_dim_h);
 
@@ -39,8 +39,7 @@ bool data_holder::read_data_for_H(std::string H_filename)
       m_H_layer[t].resize (m_dim_h);
       for (int i = 0; i < m_dim_h; i++)
         {
-          int tempi;
-          if (fscanf (h_file, "%lf%lf%lf%d", &temp, &tempx, &tempy, &tempi) != 4)
+          if (fscanf (h_file, "%lf%lf%lf", &temp, &tempx, &tempy) != 3)
             {
               fclose (h_file);
               return false;
@@ -54,7 +53,6 @@ bool data_holder::read_data_for_H(std::string H_filename)
 
           m_x_h[i] = tempx;
           m_y_h[i] = tempy;
-          m_h_M0R[i] = tempi;
         }
     }
   m_x_h.push_back (-1);
@@ -101,7 +99,7 @@ bool data_holder::read_data_for_v (std::string V_filename)
       for (int i = 0; i < m_dim_v; i++)
         {
           double temp1, temp2, tempx, tempy;
-          if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 5)
+          if (fscanf (v_file, "%lf%lf%lf%lf", &temp1, &temp2, &tempx, &tempy) != 4)
             {
               fclose (v_file);
               return false;
