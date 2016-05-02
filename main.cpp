@@ -1,5 +1,5 @@
 #include "data_holder.h"
-#include "window.h"
+#include "interface_widget.h"
 #include <fenv.h>
 #include <QMainWindow>
 #include <QApplication>
@@ -14,9 +14,10 @@ int main (int argc, char *argv[])
   window->setWindowTitle ("Graph");
 
   data_holder data;
+  //data.read_data ("density_36.log", "velocity_52.log");
   data.read_data ("density_1600.log", "velocity_1701.log");
 
-  graph_2d *draw_area = new graph_2d (window, &data);
+  interface_widget *draw_area = new interface_widget (window, &data);
 
   window->resize (500, 500);
   window->setCentralWidget (draw_area);

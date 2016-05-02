@@ -15,9 +15,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         window.cpp \
     translation_funcs.cpp \
-    data_holder.cpp
+    data_holder.cpp \
+    interface_widget.cpp
 
 HEADERS  += window.h \
-    data_holder.h
+    data_holder.h \
+    interface_widget.h
 QT += opengl
 
