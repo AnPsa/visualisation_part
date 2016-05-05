@@ -26,6 +26,8 @@ public:
   void set_timestep (int timestep);
   void run ();
 
+  void draw_vector_for_v (QPainter &painter, double x_begin, double y_begin, int velocity_counter, int time_step_number);
+
 protected:
   void paintEvent (QPaintEvent *event);
 };

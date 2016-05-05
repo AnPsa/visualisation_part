@@ -15,7 +15,7 @@ int main (int argc, char *argv[])
 
   data_holder data;
   //data.read_data ("density_36.log", "velocity_52.log");
-  data.read_data ("density_1600.log", "velocity_1701.log");
+  data.read_data ("density_400.log", "velocity_451.log");
 
   interface_widget *draw_area = new interface_widget (window, &data);
 

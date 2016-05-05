@@ -21,7 +21,7 @@ static double solve_sqr_equation_more_root (double p, double q, double r)
   return (-q + sqrt (q * q - 4 * p * r)) / (2 * p);
 }
 
-static void calculate_vect_arrow (double k, double len_vect, double y_begin, double x_end, double y_end, double &x_vect, double &y_vect)
+static void calculate_vect_arrow (double k, double len_vect, double x_begin, double y_begin, double x_end, double y_end, double &x_vect, double &y_vect)
 {
   double b = 0, p = 0, q = 0, r = 0;
   b = y_end - k * x_end;
@@ -30,10 +30,24 @@ static void calculate_vect_arrow (double k, double len_vect, double y_begin, dou
   q = 2 * (k * b - x_end - k * y_end);
   r = x_end * x_end + (y_end - b) * (y_end - b) - len_vect * len_vect;
 
-  if (y_begin < y_end)
+  bool is_positive = false;
+  if (fabs (y_begin - y_end) < EPS)
+    {
+      if (x_end > x_begin)
+        is_positive = true;
+      else
+        is_positive = false;
+    }
+  if (y_begin < y_end && x_begin < x_end)
+    is_positive = false;
+  else
+    is_positive = true;
+
+  if (!is_positive)
     x_vect = solve_sqr_equation_less_root (p, q, r);
   else
     x_vect = solve_sqr_equation_more_root (p, q, r);
+
   y_vect = k * x_vect + b;
 }
 
@@ -48,17 +62,28 @@ static void calculate_vector_coords (double v1, double v2, double x_begin, doubl
   if (fabs (v2) > EPS)
     y_end = y_begin + v2;
 
-  double ctg_phi = (y_end - y_begin) / (x_end - x_begin), ctg_alpha = 1. / tan (ALPHA);
+  double ctg_phi, ctg_alpha = 1. / tan (ALPHA);
   double len_vect = (sqrt ((x_end - x_begin) * (x_end - x_begin) + (y_end - y_begin) * (y_end - y_begin))) / 5;
   double k = 0;
 
-  //right
-  k = (ctg_phi * ctg_alpha - 1) / (ctg_phi + ctg_alpha);
-  calculate_vect_arrow (k, len_vect, y_begin, x_end, y_end, x_vect_r, y_vect_r);
+  if (fabs (x_end - x_begin) > EPS)
+    {
+      ctg_phi = (y_end - y_begin) / (x_end - x_begin);
+      //right
+      k = (ctg_phi * ctg_alpha - 1) / (ctg_phi + ctg_alpha);
+      calculate_vect_arrow (k, len_vect, x_begin, y_begin, x_end, y_end, x_vect_r, y_vect_r);
 
-  //left
-  k = (ctg_phi * ctg_alpha + 1) / (ctg_alpha - ctg_phi);
-  calculate_vect_arrow (k, len_vect, y_begin, x_end, y_end, x_vect_l, y_vect_l);
+      //left
+      k = (ctg_phi * ctg_alpha + 1) / (ctg_alpha - ctg_phi);
+      calculate_vect_arrow (k, len_vect, x_begin, y_begin, x_end, y_end, x_vect_l, y_vect_l);
+    }
+  else
+    {
+      k = -ctg_alpha;
+      calculate_vect_arrow (k, len_vect, x_begin, y_begin, x_end, y_end, x_vect_r, y_vect_r);
+      k = ctg_alpha;
+      calculate_vect_arrow (k, len_vect, x_begin, y_begin, x_end, y_end, x_vect_l, y_vect_l);
+    }
 }
 
 graph_2d::graph_2d (QWidget *parent, data_holder *idata) : QWidget (parent)
@@ -126,7 +151,7 @@ void graph_2d::draw_H (int time_step_number, QPainter &painter)
     {
       H_color (H[i], red, green);
       QColor color (red, green, 0, 180);
-      painter.setPen (QPen (color, 0.01));
+      painter.setPen (QPen (color, 0));
       QRectF h_rect (X[i], Y[i], hx, hy);
       painter.fillRect (h_rect, color);
       painter.drawRect (h_rect);
@@ -137,23 +162,10 @@ void graph_2d::draw_H (int time_step_number, QPainter &painter)
 void graph_2d::draw_V (int time_step_number, QPainter &painter)
 {
   int dim_v = m_data->m_dim_v;
-  double x_vect_l = 0, y_vect_l = 0, x_vect_r = 0, y_vect_r = 0;
-  for (int i = 0; i < dim_v; i++)
+  for (int velocity_counter = 0; velocity_counter < dim_v; velocity_counter++)
     {
-      double x_begin = m_data->m_x_v[i], y_begin = m_data->m_y_v[i];
-      double x_end, y_end;
-
-      calculate_vector_coords (m_data->m_V1_layer[time_step_number][i],
-                               m_data->m_V2_layer[time_step_number][i],
-                               x_begin, y_begin, x_end, y_end,
-                               x_vect_l, y_vect_l, x_vect_r, y_vect_r);
-      if (fabs (x_begin - x_end) > EPS || fabs (y_begin - y_end) > EPS)
-        {
-          painter.setPen (QPen (Qt::black, 0.04));
-          painter.drawLine (QPointF (x_begin, y_begin), QPointF (x_end, y_end));
-          painter.drawLine (QPointF (x_end, y_end),     QPointF (x_vect_l, y_vect_l));
-          painter.drawLine (QPointF (x_end, y_end),     QPointF (x_vect_r, y_vect_r));
-        }
+      double x_begin = m_data->m_x_v[velocity_counter], y_begin = m_data->m_y_v[velocity_counter];
+      draw_vector_for_v (painter, x_begin, y_begin, velocity_counter, time_step_number);
     }
 }
 
@@ -171,7 +183,25 @@ void graph_2d::run ()
 //      update ();
 //    }
 //  sleep  (1);
-//  update ();
+  //  update ();
+}
+
+void graph_2d::draw_vector_for_v (QPainter &painter, double x_begin, double y_begin,
+                                  int velocity_counter, int time_step_number)
+{
+  double x_end, y_end;
+  double x_vect_l = 0, y_vect_l = 0, x_vect_r = 0, y_vect_r = 0;
+  calculate_vector_coords (m_data->m_V1_layer[time_step_number][velocity_counter],
+                           m_data->m_V2_layer[time_step_number][velocity_counter],
+                           x_begin, y_begin, x_end, y_end,
+                           x_vect_l, y_vect_l, x_vect_r, y_vect_r);
+  if (fabs (x_begin - x_end) > EPS || fabs (y_begin - y_end) > EPS)
+    {
+      painter.setPen (QPen (Qt::black, 0.04));
+      painter.drawLine (QPointF (x_begin, y_begin), QPointF (x_end, y_end));
+      painter.drawLine (QPointF (x_end, y_end),     QPointF (x_vect_l, y_vect_l));
+      painter.drawLine (QPointF (x_end, y_end),     QPointF (x_vect_r, y_vect_r));
+    }
 }
 
 void graph_2d::paintEvent (QPaintEvent * /* event */)
