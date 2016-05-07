@@ -10,6 +10,7 @@
 
 #define EPS 1e-6
 #define ALPHA 0.5
+#define SCALE 0.5
 
 static double solve_sqr_equation_less_root (double p, double q, double r)
 {
@@ -198,9 +199,8 @@ void graph_2d::draw_vector_for_v (QPainter &painter, double x_begin, double y_be
   if (fabs (x_begin - x_end) > EPS || fabs (y_begin - y_end) > EPS)
     {
       painter.setPen (QPen (Qt::black, 0.04));
-      painter.drawLine (QPointF (x_begin, y_begin), QPointF (x_end, y_end));
-      painter.drawLine (QPointF (x_end, y_end),     QPointF (x_vect_l, y_vect_l));
-      painter.drawLine (QPointF (x_end, y_end),     QPointF (x_vect_r, y_vect_r));
+      painter.drawLine (QPointF (x_begin, y_begin), QPointF (x_begin + SCALE * m_data->m_V1_layer[time_step_number][velocity_counter],
+                                                             y_begin + SCALE * m_data->m_V2_layer[time_step_number][velocity_counter]));
     }
 }
 
