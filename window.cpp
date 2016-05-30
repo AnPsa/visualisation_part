@@ -114,28 +114,41 @@ void graph_2d::H_color (double value, int &red, int &green)
 {
   double max = m_data->max_H;
   double min = m_data->min_H;
-  double middle = m_data->middle_H;
+//  double middle = m_data->middle_H;
 
-  if (value > m_data->middle_H)
+  double diap = max - min;
+  if (diap < 1e-14)
     {
-      if (value - middle < 1e-15)
-        green = 255;
-      else
-        {
-          red = 255 * (value - middle) / (max - middle);
-          green = 255 - red;
-        }
+      red = 0;
+      green = 255;
     }
   else
     {
-      if (middle - value < 1e-15)
-        green = 255;
-      else
-        {
-          green = 255 * (middle - value) / (middle - min);
-          red = 255 - green;
-        }
+      red = 255 * (value - min) / diap;
+      green = 255 - red;
     }
+
+
+//  if (value > m_data->middle_H)
+//    {
+//      if (value - middle < 1e-15)
+//        green = 255;
+//      else
+//        {
+//          red = 255 * (value - middle) / (max - middle);
+//          green = 255 - red;
+//        }
+//    }
+//  else
+//    {
+//      if (middle - value < 1e-15)
+//        green = 255;
+//      else
+//        {
+//          green = 255 * (middle - value) / (middle - min);
+//          red = 255 - green;
+//        }
+//    }
 }
 
 void graph_2d::draw_H (int time_step_number, QPainter &painter)

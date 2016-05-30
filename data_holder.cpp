@@ -4,7 +4,8 @@
 
 data_holder::data_holder()
 {
-  min_H = max_H = 0;
+  min_H = -1;
+  max_H = 0;
 }
 
 bool data_holder::read_data_for_H(std::string H_filename)
@@ -21,12 +22,14 @@ bool data_holder::read_data_for_H(std::string H_filename)
   if (fscanf (h_file, "%d%d", &m_dim_h, &m_steps_count) != 2)
     {
       fclose (h_file);
+      printf ("HEY1\n");
       return false;
     }
 
   if (m_dim_h < 1 || m_steps_count < 1)
     {
       fclose (h_file);
+      printf ("HEY2\n");
       return false;
     }
 
@@ -41,12 +44,13 @@ bool data_holder::read_data_for_H(std::string H_filename)
         {
           if (fscanf (h_file, "%lf%lf%lf", &temp, &tempx, &tempy) != 3)
             {
+              printf ("HEY3\n");
               fclose (h_file);
               return false;
             }
 
           m_H_layer[t][i] = temp;
-          if (min_H > temp)
+          if (min_H > temp || min_H < 0)
             min_H = temp;
           if (max_H < temp)
             max_H = temp;
