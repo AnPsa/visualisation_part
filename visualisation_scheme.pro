@@ -14,7 +14,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         window.cpp \
-    translation_funcs.cpp \
     data_holder.cpp \
     interface_widget.cpp
 
